@@ -1,13 +1,41 @@
 "use client";
 
-import {
-  FaLinkedinIn,
-  FaGithub,
-  FaInstagram,
-  FaFacebook,
-} from "react-icons/fa";
+import { useState } from "react";
+import { FaLinkedinIn, FaGithub, FaInstagram } from "react-icons/fa";
 
 export default function Contact() {
+  const [status, setStatus] = useState(""); // "", "sending", "success", "error"
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus("sending");
+
+    const form = e.target;
+    const name = form.name.value;
+    const email = form.email.value;
+    const message = form.message.value;
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setStatus("success");
+        form.reset();
+      } else {
+        setStatus("error");
+        console.error(data.error);
+      }
+    } catch (err) {
+      console.error(err);
+      setStatus("error");
+    }
+  };
+
   return (
     <section
       id="contact"
@@ -37,42 +65,67 @@ export default function Contact() {
               and I’ll get back to you.
             </p>
 
-            <form className="flex flex-col gap-4">
+            <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
               <input
                 type="text"
+                name="name"
                 placeholder="> your_name"
                 className="bg-black border border-green-500/40 px-4 py-3 text-green-300 placeholder-green-700 focus:outline-none focus:border-green-400"
+                required
               />
 
               <input
                 type="email"
+                name="email"
                 placeholder="> your_email"
                 className="bg-black border border-green-500/40 px-4 py-3 text-green-300 placeholder-green-700 focus:outline-none focus:border-green-400"
+                required
               />
 
               <textarea
                 rows="4"
+                name="message"
                 placeholder="> message_body"
                 className="bg-black border border-green-500/40 px-4 py-3 text-green-300 placeholder-green-700 focus:outline-none focus:border-green-400 resize-none"
+                required
               />
 
               <button
                 type="submit"
-                className="mt-4 w-fit px-8 py-3 border border-green-400 text-green-400 hover:bg-green-400 hover:text-black transition-all duration-300 shadow-[0_0_15px_rgba(0,255,120,0.4)]"
+                disabled={status === "sending"}
+                className="mt-4 w-fit px-8 py-3 border border-green-400 text-green-400 hover:bg-green-400 hover:text-black transition-all duration-300 shadow-[0_0_15px_rgba(0,255,120,0.4)] disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                SEND
+                {status === "sending"
+                  ? "SENDING..."
+                  : status === "success"
+                    ? "SENT ✅"
+                    : status === "error"
+                      ? "ERROR ❌"
+                      : "SEND"}
               </button>
             </form>
+
+            {/* Optional status messages inside terminal */}
+            {status === "success" && (
+              <p className="mt-4 text-green-300">Message sent successfully!</p>
+            )}
+            {status === "error" && (
+              <p className="mt-4 text-red-500">
+                Failed to send message. Try again.
+              </p>
+            )}
           </div>
         </div>
 
         {/* RIGHT – SOCIAL NODES */}
         <div className="w-full md:w-1/6 flex md:flex-col justify-center gap-6">
           {[
-            { icon: FaLinkedinIn, href: "https://linkedin.com" },
-            { icon: FaGithub, href: "https://github.com" },
-            { icon: FaInstagram, href: "https://instagram.com" },
-            { icon: FaFacebook, href: "https://facebook.com" },
+            {
+              icon: FaLinkedinIn,
+              href: "https://www.linkedin.com/in/gregory-haji-joannou-885553216/",
+            },
+            { icon: FaGithub, href: "https://github.com/GregHaji" },
+            { icon: FaInstagram, href: "https://www.instagram.com/greg_haji/" },
           ].map((item, i) => (
             <a
               key={i}
