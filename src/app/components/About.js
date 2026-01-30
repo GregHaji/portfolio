@@ -96,7 +96,7 @@ export default function About() {
           passion.
           <br />
           <br />
-          Today, I’m a full stack developer with three years of experience
+          Today, I’m a full stack developer with 3+ years of experience
           collaborating across teams and projects. I still approach development
           the same way I did back then: experimenting, learning, and constantly
           pushing myself to build better, more thoughtful solutions.
