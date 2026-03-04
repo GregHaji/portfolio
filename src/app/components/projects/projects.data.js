@@ -10,6 +10,28 @@ import PumpHero from "./projectsImages/pumpHero.png";
 import DogHero from "./projectsImages/doghero.png";
 
 export const PROJECTS = {
+  selector: {
+    id: "selector",
+    title: "Pump Selection Engine",
+    description:
+      "Engineering-grade pump selection tool using performance curves, efficiency calculations, and real-world constraints. Fully deployed and accessible online.",
+    stack: [
+      "Next.js",
+      "MongoDB",
+      "Tailwind",
+      "GSAP",
+      "Auth0",
+      "Express.js",
+      "Node.js",
+      "Chartjs",
+    ],
+    images: [PumpHero, PumpSelector, PumpQuotes, PumpTools],
+    featuredImage: PumpSelector,
+    year: 2024,
+    role: "Fullstack Developer",
+    status: "LIVE",
+    link: "https://curp-pumps.vercel.app/",
+  },
   orbit: {
     id: "orbit",
     title: "AI Agent",
@@ -24,26 +46,12 @@ export const PROJECTS = {
     link: null,
   },
 
-  selector: {
-    id: "selector",
-    title: "Pump Selection Engine",
-    description:
-      "Engineering-grade pump selection tool using performance curves, efficiency calculations, and real-world constraints. Fully deployed and accessible online.",
-    stack: ["Next.js", "MongoDB", "Tailwind", "GSAP"],
-    images: [PumpHero, PumpSelector, PumpQuotes, PumpTools],
-    featuredImage: PumpSelector,
-    year: 2024,
-    role: "Fullstack Developer",
-    status: "LIVE",
-    link: "https://curp-pumps.vercel.app/",
-  },
-
   herodog: {
     id: "herodog",
-    title: "360° Vehicle Viewer",
+    title: "AI Image Generator",
     description:
-      "Interactive 360-degree vehicle viewer allowing internal and external views with smooth transitions. Work in progress.",
-    stack: ["Next.js", "Three.js", "PostgreSQL"],
+      "AI image generator using Stable Diffusion and Gemini. Creates visually stunning and realistic images from text prompts, providing a unique and engaging user experience.",
+    stack: ["Next.js", "PostgreSQL", "Tailwind", "GSAP"],
     images: [DogHero],
     featuredImage: DogHero,
     year: 2025,

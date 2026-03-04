@@ -18,32 +18,73 @@ export default function Nav() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 md:flex justify-center w-full p-4 bg-black/50 backdrop-blur-sm z-50 border-b border-green-700/50 hidden ">
-      <div className="flex space-x-16 text-green-400 font-mono">
-        {navItems.map((item, index) => (
-          <div
-            key={index}
-            className="flex items-center space-x-2 cursor-pointer group"
-            onClick={() => scrollToSection(item.id)}
-          >
-            {/* Retro node */}
-            <div
-              className="w-3 h-3 rounded-full border-2 border-green-400
-                            animate-pulse group-hover:scale-125
-                            group-hover:shadow-[0_0_8px_rgba(0,255,0,0.8)]
-                            transition-all duration-200"
-            ></div>
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500&display=swap');
 
-            {/* Text */}
-            <div className="relative overflow-hidden">
-              <span className="inline-block transition-all duration-300 group-hover:text-green-300">
-                {item.name}
-              </span>
-              {/* Optional blinking cursor */}
-            </div>
-          </div>
-        ))}
-      </div>
-    </nav>
+        .nav-link {
+          font-family: 'Outfit', sans-serif;
+          font-size: 0.7rem;
+          font-weight: 500;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
+          color: rgba(200, 205, 235, 0.45);
+          cursor: pointer;
+          text-decoration: none;
+          transition: color 0.2s;
+          position: relative;
+          padding-bottom: 2px;
+        }
+        .nav-link::after {
+          content: '';
+          position: absolute;
+          bottom: -2px;
+          left: 0;
+          width: 0;
+          height: 1px;
+          background: #f5c800;
+          transition: width 0.25s cubic-bezier(.22,1,.36,1);
+        }
+        .nav-link:hover { color: #f5c800; }
+        .nav-link:hover::after { width: 100%; }
+      `}</style>
+
+      <nav className="fixed top-0 left-0 right-0 z-50 hidden md:flex items-center justify-between px-10 lg:px-20 h-16 bg-[#08090e]/80 backdrop-blur-md border-b border-white/[0.06]">
+        {/* LOGO */}
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="font-syne font-extrabold text-lg tracking-tight text-[#eceef8] cursor-pointer bg-transparent border-none p-0"
+          style={{ fontFamily: "'Syne', sans-serif" }}
+        >
+          GH<span style={{ color: "#f5c800" }}>.</span>
+        </button>
+
+        {/* LINKS */}
+        <div className="flex items-center gap-10">
+          {navItems.map((item) => (
+            <span
+              key={item.id}
+              className="nav-link"
+              onClick={() => scrollToSection(item.id)}
+            >
+              {item.name}
+            </span>
+          ))}
+        </div>
+
+        {/* CTA */}
+        <a
+          href="#contact"
+          onClick={(e) => {
+            e.preventDefault();
+            scrollToSection("contact");
+          }}
+          className="font-outfit text-[0.68rem] font-semibold tracking-[0.15em] uppercase px-4 py-2 rounded-sm border border-[#f5c800]/60 text-[#f5c800] hover:bg-[#f5c800] hover:text-[#08090e] transition-all duration-200"
+          style={{ fontFamily: "'Outfit', sans-serif" }}
+        >
+          Hire Me
+        </a>
+      </nav>
+    </>
   );
 }
