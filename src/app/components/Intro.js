@@ -45,9 +45,7 @@ export default function Intro() {
         @keyframes flicker {
           0%,100%{opacity:1} 92%{opacity:1} 93%{opacity:0.4} 95%{opacity:1} 97%{opacity:0.6} 98%{opacity:1}
         }
-        @keyframes scandown {
-          0%{top:0%} 100%{top:100%}
-        }
+     
         @keyframes corner-pulse {
           0%,100%{opacity:1;box-shadow:0 0 0px rgba(74,222,128,0)} 50%{opacity:0.5;box-shadow:0 0 12px rgba(74,222,128,0.6)}
         }
@@ -96,14 +94,7 @@ export default function Intro() {
         .float-anim { animation: float-up 4s ease-in-out infinite; }
         .cursor-blink { animation: blink 1s step-end infinite; }
 
-        .scan-line {
-          position:absolute;
-          left:0;right:0;
-          height:2px;
-          background:linear-gradient(90deg, transparent, rgba(74,222,128,0.15), transparent);
-          animation: scandown 3s linear infinite;
-          pointer-events:none;
-        }
+       
 
         .tag-stagger > *:nth-child(1){animation:tag-in 0.4s ease forwards 0.8s;opacity:0}
         .tag-stagger > *:nth-child(2){animation:tag-in 0.4s ease forwards 1s;opacity:0}
@@ -284,7 +275,7 @@ export default function Intro() {
                     stroke="rgba(74,222,128,0.4)"
                     strokeWidth="1"
                     strokeDasharray="8 6"
-                    style={{ animation: "border-march 6s linear infinite" }}
+                    style={{ animation: "border-march 50s linear infinite" }}
                   />
                 </svg>
 
@@ -319,11 +310,6 @@ export default function Intro() {
                     className="w-full object-cover [filter:contrast(1.05)_brightness(0.95)_saturate(0.9)]"
                     priority
                   />
-                </div>
-
-                {/* Scanline over image */}
-                <div className="absolute inset-0 pointer-events-none rounded overflow-hidden">
-                  <div className="absolute inset-0 bg-[repeating-linear-gradient(0deg,transparent,transparent_3px,rgba(0,0,0,0.08)_3px,rgba(0,0,0,0.08)_4px)]" />
                 </div>
 
                 {/* Status bar under image */}
