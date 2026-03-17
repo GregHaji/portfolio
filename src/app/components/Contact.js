@@ -19,6 +19,7 @@ const socials = [
 
 export default function Contact() {
   const [status, setStatus] = useState("");
+  const [focused, setFocused] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,169 +49,216 @@ export default function Contact() {
     }
   };
 
+  const inputClass = (name) => `
+    w-full bg-transparent border rounded px-4 py-3 text-xs text-green-200/80
+    placeholder:text-green-900 outline-none transition-all duration-200
+    font-[inherit] tracking-wide
+    ${
+      focused === name
+        ? "border-green-500/60 shadow-[0_0_12px_rgba(74,222,128,0.08)]"
+        : "border-green-900/50 hover:border-green-800/60"
+    }
+  `;
+
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@300;400;500;600&display=swap');
-        .font-syne   { font-family: 'Syne', sans-serif; }
-        .font-outfit { font-family: 'Outfit', sans-serif; }
-
-        .contact-input {
-          width: 100%;
-          background: transparent;
-          border: 1px solid rgba(255,255,255,0.08);
-          border-radius: 3px;
-          padding: 0.85rem 1rem;
-          font-family: 'Outfit', sans-serif;
-          font-size: 0.9rem;
-          font-weight: 300;
-          color: rgba(236,238,248,0.85);
-          outline: none;
-          transition: border-color 0.2s;
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap');
+        .contact-mono { font-family: 'Share Tech Mono', monospace; }
+        .contact-vt   { font-family: 'VT323', monospace; }
+        @keyframes cursor-blink { 0%,100%{opacity:1} 50%{opacity:0} }
+        .cursor { animation: cursor-blink 1s step-end infinite; }
+        @keyframes send-pulse {
+          0%   { box-shadow: 0 0 0 0 rgba(74,222,128,0.4); }
+          70%  { box-shadow: 0 0 0 8px rgba(74,222,128,0); }
+          100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); }
         }
-        .contact-input::placeholder { color: rgba(255,255,255,0.2); }
-        .contact-input:focus { border-color: rgba(245,200,0,0.45); }
-
-        .btn-send {
-          display: inline-block;
-          padding: 0.75rem 2rem;
-          background: #f5c800;
-          color: #08090e;
-          font-family: 'Outfit', sans-serif;
-          font-size: 0.72rem;
-          font-weight: 600;
-          letter-spacing: 0.15em;
-          text-transform: uppercase;
-          border: none;
-          border-radius: 3px;
-          cursor: pointer;
-          transition: background 0.2s, transform 0.15s;
-        }
-        .btn-send:hover:not(:disabled) { background: #ffd426; transform: translateY(-2px); }
-        .btn-send:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-send:not(:disabled):hover { animation: send-pulse 0.6s ease-out; }
       `}</style>
 
       <section
         id="contact"
-        className="font-outfit w-full bg-[#08090e] py-28 px-6 sm:px-12 md:px-20"
+        className="contact-mono relative w-full bg-black py-28 px-6 sm:px-12 md:px-20 overflow-hidden"
       >
-        <div className="max-w-[1200px] mx-auto">
-          {/* HEADER */}
+        {/* Grid bg */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(74,222,128,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(74,222,128,0.03)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
+        {/* Radial glow */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_80%,rgba(0,30,10,0.4),transparent)] pointer-events-none" />
+
+        <div className="relative z-10 max-w-6xl mx-auto">
+          {/* Header */}
           <div className="mb-16">
-            <div className="flex items-center gap-3 mb-5">
-              <span className="block w-7 h-0.5 bg-[#f5c800] rounded" />
-              <span className="text-[0.65rem] tracking-[0.28em] uppercase text-[#f5c800] font-medium">
-                Get In Touch
+            <p className="text-green-700 text-xs tracking-[0.3em] uppercase mb-4">
+              {"// src/contact/index.ts"}
+            </p>
+            <div className="flex items-baseline gap-3">
+              <h2 className="contact-vt text-6xl md:text-7xl text-green-300 leading-none [text-shadow:0_0_20px_rgba(74,222,128,0.3)]">
+                Let&apos;s_Build
+              </h2>
+              <span className="contact-vt text-5xl text-green-700 leading-none">
+                ();
               </span>
             </div>
-            <h2 className="font-syne font-extrabold text-5xl md:text-6xl tracking-tight text-[#eceef8] leading-[0.95]">
-              Let&apos;s
-              <br />
-              <span
-                style={{
-                  WebkitTextStroke: "2px #f5c800",
-                  color: "transparent",
-                }}
-              >
-                Work Together.
-              </span>
-            </h2>
           </div>
 
-          <div className="flex flex-col md:flex-row gap-12 md:gap-20">
-            {/* ── FORM ── */}
+          <div className="flex flex-col md:flex-row gap-14 md:gap-20">
+            {/* Form */}
             <div className="flex-1">
-              <p className="text-[0.95rem] font-light text-white/40 leading-relaxed mb-10 max-w-md">
-                Have a project, idea, or just want to say hi? Send a message
-                below and I&apos;ll get back to you as soon as possible.
-              </p>
+              {/* Prompt description */}
+              <div className="border-l-2 border-green-800/60 pl-4 mb-10">
+                <p className="text-green-200/50 text-xs leading-relaxed">
+                  Have a project, idea, or just want to say hi?
+                  <br />
+                  Send a message below and I&apos;ll get back to you ASAP.
+                </p>
+              </div>
 
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Your name"
-                  className="contact-input"
-                  required
-                />
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Your email"
-                  className="contact-input"
-                  required
-                />
-                <textarea
-                  rows={5}
-                  name="message"
-                  placeholder="Your message"
-                  className="contact-input resize-none"
-                  required
-                />
+              <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+                {/* Fake file comment above name */}
+                <p className="text-green-800 text-[10px] tracking-wider -mb-1">
+                  {" // required fields"}
+                </p>
+
+                <div className="relative">
+                  <span className="absolute left-4 top-3 text-green-700 text-[10px] pointer-events-none">
+                    name:
+                  </span>
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder='"Your name"'
+                    className={`${inputClass("name")} pl-16`}
+                    onFocus={() => setFocused("name")}
+                    onBlur={() => setFocused("")}
+                    required
+                  />
+                </div>
+
+                <div className="relative">
+                  <span className="absolute left-4 top-3 text-green-700 text-[10px] pointer-events-none">
+                    email:
+                  </span>
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder='"your@email.com"'
+                    className={`${inputClass("email")} pl-16`}
+                    onFocus={() => setFocused("email")}
+                    onBlur={() => setFocused("")}
+                    required
+                  />
+                </div>
+
+                <div className="relative">
+                  <span className="absolute left-4 top-3 text-green-700 text-[10px] pointer-events-none">
+                    msg:
+                  </span>
+                  <textarea
+                    rows={5}
+                    name="message"
+                    placeholder='"Your message..."'
+                    className={`${inputClass("message")} pl-16 resize-none`}
+                    onFocus={() => setFocused("message")}
+                    onBlur={() => setFocused("")}
+                    required
+                  />
+                </div>
 
                 <div className="flex items-center gap-5 mt-2">
                   <button
                     type="submit"
-                    className="btn-send"
                     disabled={status === "sending"}
+                    className="btn-send group flex items-center gap-2 text-[10px] tracking-widest uppercase text-black bg-green-400 hover:bg-green-300 disabled:opacity-50 disabled:cursor-not-allowed px-6 py-2.5 rounded transition-all duration-200 font-semibold"
                   >
-                    {status === "sending"
-                      ? "Sending..."
-                      : status === "success"
-                        ? "Sent ✓"
-                        : status === "error"
-                          ? "Error — retry"
-                          : "Send Message"}
+                    <span>
+                      {status === "sending"
+                        ? "Sending..."
+                        : status === "success"
+                          ? "Sent ✓"
+                          : status === "error"
+                            ? "Retry"
+                            : "$ send --message"}
+                    </span>
                   </button>
+
                   {status === "success" && (
-                    <span className="text-[0.8rem] text-[#f5c800]/80">
-                      Message sent successfully!
+                    <span className="text-green-400 text-[10px] tracking-wider">
+                      ✔ Message delivered
                     </span>
                   )}
                   {status === "error" && (
-                    <span className="text-[0.8rem] text-red-400/80">
-                      Something went wrong. Try again.
+                    <span className="text-red-400/80 text-[10px] tracking-wider">
+                      ✖ Error — try again
                     </span>
                   )}
                 </div>
               </form>
             </div>
 
-            {/* ── SOCIALS ── */}
-            <div className="flex md:flex-col justify-start gap-4 md:pt-2">
-              <div className="hidden md:block mb-2">
-                <span className="text-[0.65rem] tracking-[0.2em] uppercase text-white/25">
-                  Find me on
-                </span>
-              </div>
+            {/* Socials + info */}
+            <div className="flex flex-col gap-6 md:min-w-[200px]">
+              <p className="text-green-700 text-[10px] tracking-widest uppercase mb-2">
+                {"// find me on"}
+              </p>
               {socials.map(({ icon: Icon, href, label }) => (
                 <a
                   key={label}
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center gap-3 text-white/35 hover:text-[#f5c800] transition-colors duration-200"
+                  className="group flex items-center gap-4 text-green-700 hover:text-green-300 transition-colors duration-200"
                 >
-                  <div className="w-10 h-10 flex items-center justify-center border border-white/10 rounded-sm bg-white/[0.02] group-hover:border-[#f5c800]/40 transition-colors duration-200">
+                  <div className="w-9 h-9 flex items-center justify-center border border-green-900/60 group-hover:border-green-600/60 group-hover:bg-green-950/30 rounded transition-all duration-200">
                     <Icon className="text-sm" />
                   </div>
-                  <span className="text-[0.72rem] tracking-[0.12em] uppercase font-medium hidden md:block">
+
+                  <span className="text-[10px] tracking-widest uppercase">
                     {label}
+                  </span>
+
+                  <span className="text-green-900 group-hover:text-green-700 transition-colors ml-auto">
+                    →
                   </span>
                 </a>
               ))}
+
+              {/* Terminal status block */}
+              <div className="mt-6 border border-green-900/40 bg-green-950/10 rounded p-4 space-y-1">
+                <p className="text-green-700 text-[9px] tracking-widest">
+                  {"// status"}
+                </p>
+                <p className="text-green-400 text-[10px] tracking-wider">
+                  <span className="text-green-700 mr-2">▸</span>
+                  available_for_work:{" "}
+                  <span className="text-green-300">true</span>
+                </p>
+                <p className="text-green-400 text-[10px] tracking-wider">
+                  <span className="text-green-700 mr-2">▸</span>
+                  location:{" "}
+                  <span className="text-green-300">&quot;JHB, ZA&quot;</span>
+                </p>
+                <p className="text-green-400 text-[10px] tracking-wider">
+                  <span className="text-green-700 mr-2">▸</span>
+                  response_time:{" "}
+                  <span className="text-green-300">&quot;24h&quot;</span>
+                </p>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* BOTTOM RULE */}
-        <div className="max-w-[1200px] mx-auto mt-24 pt-8 border-t border-white/[0.06] flex items-center justify-between flex-wrap gap-4">
-          <span className="font-syne font-extrabold text-lg text-[#eceef8]">
-            GH<span className="text-[#f5c800]">.</span>
-          </span>
-          <span className="text-[0.7rem] tracking-[0.1em] text-white/20">
-            © {new Date().getFullYear()} Greg Haji. All rights reserved.
-          </span>
+          {/* Footer bar */}
+          <div className="mt-20 pt-6 border-t border-green-900/40 flex items-center justify-between flex-wrap gap-4">
+            <div className="flex items-center gap-2">
+              <span className="contact-vt text-2xl text-green-400 [text-shadow:0_0_10px_rgba(74,222,128,0.5)]">
+                GH
+              </span>
+              <span className="contact-vt text-2xl text-green-700">.</span>
+              <span className="w-1.5 h-3.5 bg-green-700 cursor inline-block ml-1" />
+            </div>
+            <span className="text-green-800 text-[10px] tracking-widest">
+              © {new Date().getFullYear()} Greg Haji — All rights reserved
+            </span>
+          </div>
         </div>
       </section>
     </>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import {
   SiReact,
   SiNextdotjs,
@@ -24,52 +25,68 @@ import { FaServer, FaDatabase, FaCloud, FaCode } from "react-icons/fa";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const categories = [
+gsap.registerPlugin(ScrollTrigger);
+
+const modules = [
   {
+    id: "frontend()",
     icon: FaCode,
-    label: "Frontend",
-    body: (
-      <>
-        Building responsive, accessible interfaces with <b>React</b>,{" "}
-        <b>Next.js</b>, and <b>Tailwind CSS</b>. Motion and interaction handled
-        with <b>GSAP</b> and <b>Three.js</b>. Component libraries include{" "}
-        <b>MUI</b> and Bootstrap.
-      </>
-    ),
+    prefix: "<div>",
+    suffix: "</div>",
+    content: [
+      { label: "React", accent: true },
+      { label: "Next.js", accent: true },
+      { label: "Tailwind CSS", accent: true },
+      { label: "GSAP", accent: true },
+      { label: "Three.js", accent: true },
+      { label: "MUI", accent: false },
+    ],
+    desc: "Building responsive, accessible interfaces with modern tooling. Motion and interaction handled with GSAP and Three.js.",
   },
   {
+    id: "backend()",
     icon: FaServer,
-    label: "Backend",
-    body: (
-      <>
-        Designing APIs and backend services using <b>Node.js</b> and{" "}
-        <b>Express</b>. Enforcing code quality with <b>Jest</b> and <b>Husky</b>
-        , while maintaining secure communication and predictable behavior.
-      </>
-    ),
+    prefix: "try {",
+    suffix: "} catch",
+    content: [
+      { label: "Node.js", accent: true },
+      { label: "Express", accent: true },
+      { label: "Jest", accent: false },
+      { label: "Husky", accent: false },
+      { label: "REST APIs", accent: true },
+    ],
+    desc: "Designing APIs and backend services. Enforcing code quality with Jest and Husky, maintaining secure communication.",
   },
   {
+    id: "database()",
     icon: FaDatabase,
-    label: "Database",
-    body: (
-      <>
-        Experience with relational and NoSQL databases including{" "}
-        <b>PostgreSQL</b>, <b>MySQL</b>, <b>SQL Server</b>, <b>MongoDB</b>, and{" "}
-        <b>Firebase</b>. Focused on performance, schema design, and reliability.
-      </>
-    ),
+    prefix: "SELECT *",
+    suffix: "FROM data",
+    content: [
+      { label: "PostgreSQL", accent: true },
+      { label: "MySQL", accent: true },
+      { label: "SQL Server", accent: false },
+      { label: "MongoDB", accent: true },
+      { label: "Firebase", accent: true },
+    ],
+    desc: "Experience with relational and NoSQL databases. Focused on performance, schema design, and reliability.",
   },
   {
+    id: "deploy()",
     icon: FaCloud,
-    label: "DevOps & Cloud",
-    body: (
-      <>
-        Deploying and scaling applications with <b>Vercel</b> and <b>Netlify</b>
-        . Automating pipelines using <b>Docker</b> and <b>GitHub Actions</b>.
-        Cloud storage via <b>Amazon S3</b>.
-      </>
-    ),
+    prefix: "BUILDING",
+    suffix: "BUILT ✓",
+    content: [
+      { label: "Vercel", accent: true },
+      { label: "Netlify", accent: true },
+      { label: "Docker", accent: true },
+      { label: "GitHub Actions", accent: true },
+      { label: "Amazon S3", accent: false },
+    ],
+    desc: "Deploying and scaling apps with Vercel and Netlify. Automating pipelines with Docker and GitHub Actions.",
   },
 ];
 
@@ -94,98 +111,162 @@ const allTools = [
   { name: "Amazon S3", icon: <SiAmazons3 /> },
 ];
 
-export default function ExpertiseSection() {
+export default function Skills() {
+  const sectionRef = useRef(null);
+  const cardRefs = useRef([]);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      cardRefs.current.forEach((card, i) => {
+        if (!card) return;
+        gsap.fromTo(
+          card,
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.65,
+            ease: "power3.out",
+            delay: i * 0.1,
+            scrollTrigger: { trigger: card, start: "top 85%", once: true },
+          },
+        );
+      });
+    }, sectionRef);
+    return () => ctx.revert();
+  }, []);
+
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@300;400;500;600&display=swap');
-        .font-syne   { font-family: 'Syne', sans-serif; }
-        .font-outfit { font-family: 'Outfit', sans-serif; }
-        .skill-card b { color: rgba(245,200,0,0.8); font-weight: 500; }
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap');
+        .skills-mono { font-family: 'Share Tech Mono', monospace; }
+        .skills-vt   { font-family: 'VT323', monospace; }
+        @keyframes card-scan {
+          0%   { background-position: 0 -100%; }
+          100% { background-position: 0 200%; }
+        }
+        .module-card:hover::before {
+          content: '';
+          position: absolute; inset: 0;
+          background: linear-gradient(180deg, transparent 0%, rgba(74,222,128,0.04) 50%, transparent 100%);
+          background-size: 100% 50%;
+          animation: card-scan 1.5s linear infinite;
+          pointer-events: none;
+          border-radius: inherit;
+        }
+        .marquee-icon { font-size: 2rem; color: rgba(74,222,128,0.4); transition: color 0.2s; }
+        .marquee-icon:hover { color: rgba(74,222,128,0.9); }
       `}</style>
 
       <section
         id="my-skills"
-        className="font-outfit w-full bg-[#08090e] py-28 px-6 sm:px-12 md:px-20 border-b border-white/[0.06] overflow-hidden"
+        ref={sectionRef}
+        className="skills-mono relative w-full bg-black py-28 px-6 sm:px-12 md:px-20 overflow-hidden"
       >
-        <div className="max-w-[1200px] mx-auto">
-          {/* HEADER */}
+        {/* Grid */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(74,222,128,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(74,222,128,0.03)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
+
+        <div className="relative z-10 max-w-6xl mx-auto">
+          {/* Header */}
           <div className="mb-16">
-            <div className="flex items-center gap-3 mb-5">
-              <span className="block w-7 h-0.5 bg-[#f5c800] rounded" />
-              <span className="text-[0.65rem] tracking-[0.28em] uppercase text-[#f5c800] font-medium">
-                Expertise
-              </span>
+            <p className="text-green-700 text-xs tracking-[0.3em] uppercase mb-4">
+              {"// src/core/expertise.ts"}
+            </p>
+            <div className="flex items-baseline gap-3">
+              <span className="text-green-700 text-xl">export const</span>
+              <h2 className="skills-vt text-6xl md:text-7xl text-green-300 leading-none [text-shadow:0_0_20px_rgba(74,222,128,0.3)]">
+                skills
+              </h2>
+              <span className="text-green-700 text-xl">= &#123;</span>
             </div>
-            <h2 className="font-syne font-extrabold text-5xl md:text-6xl tracking-tight text-[#eceef8] leading-[0.95]">
-              My
-              <br />
-              <span
-                style={{
-                  WebkitTextStroke: "2px #f5c800",
-                  color: "transparent",
-                }}
-              >
-                Skills.
-              </span>
-            </h2>
           </div>
 
-          {/* CARDS GRID */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-20">
-            {categories.map(({ icon: Icon, label, body }) => (
-              <div
-                key={label}
-                className="skill-card group rounded border border-white/[0.07] bg-white/[0.02] p-7 flex flex-col gap-5 hover:border-[#f5c800]/30 transition-colors duration-300"
-              >
-                {/* ICON + LABEL */}
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 flex items-center justify-center rounded-sm border border-white/10 bg-white/[0.03] text-[#f5c800] group-hover:border-[#f5c800]/40 transition-colors duration-200">
-                    <Icon className="text-sm" />
+          {/* Module cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            {modules.map((mod, i) => {
+              const Icon = mod.icon;
+              return (
+                <div
+                  key={mod.id}
+                  ref={(el) => (cardRefs.current[i] = el)}
+                  className="module-card relative border border-green-900/50 hover:border-green-600/60 bg-green-950/10 hover:bg-green-950/20 rounded-lg p-6 transition-all duration-300 overflow-hidden"
+                >
+                  {/* Card header */}
+                  <div className="flex items-center gap-2.5 mb-5">
+                    <Icon className="text-green-600 w-4 h-4" />
+                    <span className="text-green-400 text-sm tracking-wide">
+                      {mod.id}
+                    </span>
                   </div>
-                  <h3 className="font-syne font-bold text-base text-[#eceef8] tracking-tight">
-                    {label}
-                  </h3>
+
+                  <div className="flex flex-wrap gap-1.5 mb-4 ">
+                    {mod.content.map((c) => (
+                      <span
+                        key={c.label}
+                        className={`text-[10px] px-2 py-0.5 rounded border tracking-wider ${
+                          c.accent
+                            ? "text-green-300 border-green-700/60 bg-green-950/50"
+                            : "text-green-700 border-green-900/60 bg-transparent"
+                        }`}
+                      >
+                        {c.label}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Prefix */}
+                  <p className="text-green-700 text-xs mb-3 tracking-wider">
+                    {mod.prefix}
+                  </p>
+
+                  {/* Tags */}
+
+                  {/* Desc */}
+                  <p className="text-green-200/40 text-xs leading-relaxed mb-4 pl-3 border-l border-green-800/50">
+                    {mod.desc}
+                  </p>
+
+                  {/* Suffix */}
+                  <p className="text-green-700 text-xs tracking-wider">
+                    {mod.suffix}
+                  </p>
                 </div>
-
-                {/* DIVIDER */}
-                <div className="h-px bg-white/[0.06]" />
-
-                {/* BODY */}
-                <p className="text-[0.85rem] font-light text-white/40 leading-relaxed">
-                  {body}
-                </p>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
-          {/* MARQUEE */}
-          <div className="border-t border-b border-white/[0.06] py-6">
+          <p className="text-green-700 text-xs mt-6 ml-1">
+            &#125;{" "}
+            <span className="text-green-900">
+              {"// tools continuously evolving"}
+            </span>
+          </p>
+
+          {/* Marquee */}
+          <div className="mt-16 border-l-4 border-r-4 border-green-800/50">
             <Slider
               dots={false}
               infinite
               arrows={false}
-              speed={18000}
+              speed={20000}
               slidesToShow={10}
-              slidesToScroll={1}
+              slidesToScroll={8}
               autoplay
               autoplaySpeed={0}
               cssEase="linear"
               responsive={[
-                { breakpoint: 1024, settings: { slidesToShow: 7 } },
-                { breakpoint: 768, settings: { slidesToShow: 5 } },
+                { breakpoint: 1024, settings: { slidesToShow: 6 } },
+                { breakpoint: 768, settings: { slidesToShow: 4 } },
                 { breakpoint: 480, settings: { slidesToShow: 4 } },
               ]}
             >
               {allTools.map((tool) => (
                 <div
                   key={tool.name}
-                  className="flex flex-col items-center justify-center gap-2 px-4 py-3 opacity-30 hover:opacity-80 transition-opacity duration-200 cursor-default select-none"
+                  className="flex items-center justify-center p-5"
                 >
-                  <span className="text-white text-3xl">{tool.icon}</span>
-                  <span className="text-[0.6rem] tracking-[0.12em] uppercase text-white/50">
-                    {tool.name}
-                  </span>
+                  <span className="marquee-icon">{tool.icon}</span>
                 </div>
               ))}
             </Slider>
